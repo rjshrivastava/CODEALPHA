@@ -1,1 +1,146 @@
+index.html
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>TO-DO LIST BY RAJ</h1>
+        <input type="text" id="taskInput" placeholder="Enter a new work..." />
+        <button id="addTaskButton">Record Work</button>
+        <ul id="taskList"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+---------------------------------------------------------------------------------------------------------
+
+styles.css
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: linear-gradient;
+    padding: 70px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+li {
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.deleteButton {
+    background: transparent;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+-------------------------------------------------------------------------------------------------
+
+script.js
+  document.getElementById('addTaskButton').addEventListener('click', addTask);
+
+function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const taskValue = taskInput.value.trim();
+
+    if (taskValue === '') {
+        alert('Please enter a task!');
+        return;
+    }
+
+    const li = document.createElement('li');
+    li.textContent = taskValue;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'deleteButton';
+    deleteButton.addEventListener('click', () => {
+        li.remove();
+    });
+
+    li.appendChild(deleteButton);
+    document.getElementById('taskList').appendChild(li);
+    taskInput.value = '';
+}
+
+// Optional: Save tasks to localStorage
+window.addEventListener('load', () => {
+    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    savedTasks.forEach(task => {
+        const li = document.createElement('li');
+        li.textContent = task;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'deleteButton';
+        deleteButton.addEventListener('click', () => {
+            li.remove();
+            saveTasks();
+        });
+
+        li.appendChild(deleteButton);
+        document.getElementById('taskList').appendChild(li);
+    });
+});
+
+function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll('#taskList li').forEach(li => {
+        tasks.push(li.firstChild.textContent);
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
 
